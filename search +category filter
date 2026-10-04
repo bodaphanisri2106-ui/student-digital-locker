@@ -1,0 +1,15 @@
+const filteredDocuments = documents.filter((document) => {
+  const matchesSearch =
+    document.name
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+    document.tags?.some((tag) =>
+      tag.toLowerCase().includes(search.toLowerCase())
+    );
+
+  const matchesCategory =
+    category === "All" ||
+    document.category === category;
+
+  return matchesSearch && matchesCategory;
+});
