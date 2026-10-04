@@ -1,0 +1,12 @@
+async function toggleFavorite(
+  document: DocumentRow
+) {
+  const supabase = createClient();
+
+  await supabase
+    .from("documents")
+    .update({
+      is_favorite: !document.is_favorite,
+    })
+    .eq("id", document.id);
+}
