@@ -1,0 +1,29 @@
+async function deleteDocument(document: DocumentRow) {
+  const confirmed = window.confirm(
+    `Delete "${document.name}"? This cannot be undone.`
+  );
+
+  if (!confirmed) return;
+
+  const supabase = createClient();
+
+  await supabase.storage
+    .from("locker")
+    .remove([document.storage_path]);
+
+  const { error } = await supabase
+    .from("documents")
+    .delete()
+    .eq("id", document.id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  await supabase.from("activity").insert({
+    user_id: document.user_id,
+    action: "deleted",
+    document_name: document.name,
+  });
+}
